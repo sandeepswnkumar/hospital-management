@@ -79,7 +79,7 @@ public class User {
     @Column(name = "updated_by")
     private Long updatedBy;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     UserDetails userDetails;
 
 }

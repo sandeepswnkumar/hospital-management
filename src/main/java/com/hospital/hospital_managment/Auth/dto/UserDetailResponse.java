@@ -5,8 +5,8 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class UserDetailRequest {
-
+public class UserDetailResponse {
+    private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -14,8 +14,7 @@ public class UserDetailRequest {
     private String gender;
     private String address1;
     private String address2;
-    private Integer cityId;
-    private Integer stateId;
-    private Integer countryId;
-
+    private Integer city;
+    private Integer state;
+    private Integer country;
 }

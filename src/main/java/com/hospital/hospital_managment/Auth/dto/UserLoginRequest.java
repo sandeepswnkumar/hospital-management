@@ -3,9 +3,7 @@ package com.hospital.hospital_managment.Auth.dto;
 import lombok.Data;
 
 @Data
-public class UserCreateRequest {
-
+public class UserLoginRequest {
     private String email;
     private String password;
-    private UserDetailRequest userDetailRequest;
 }
