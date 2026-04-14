@@ -1,5 +1,8 @@
 package com.hospital.hospital_managment.Auth.model;
 
+import com.hospital.hospital_managment.common.master.model.City;
+import com.hospital.hospital_managment.common.master.model.Country;
+import com.hospital.hospital_managment.common.master.model.State;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,10 +38,10 @@ public class UserDetails {
     private String lastName;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private LocalDate dateOfBirth = null;
 
     @Column(name = "gender")
-    private String gender;
+    private String gender = null;
 
     @Column(name = "address1")
     private String address1;
@@ -47,13 +50,13 @@ public class UserDetails {
     private String address2;
 
     @Column(name = "city_id")
-    private Integer city;
+    private City city;
 
     @Column(name = "state_id")
-    private Integer state;
+    private State state;
 
     @Column(name = "country_id")
-    private Integer country;
+    private Country country;
 
     @Column(name = "created_at")
     @CreationTimestamp

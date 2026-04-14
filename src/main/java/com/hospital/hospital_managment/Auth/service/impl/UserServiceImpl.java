@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    PasswordService passwordService;
-    UserRepository userRepository;
+    private final PasswordService passwordService;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         userDetails.setGender(userCreateRequest.getUserDetailRequest().getGender());
         userDetails.setAddress1(userCreateRequest.getUserDetailRequest().getAddress1());
         userDetails.setAddress2(userCreateRequest.getUserDetailRequest().getAddress2());
+
         return userDetails;
     }
 

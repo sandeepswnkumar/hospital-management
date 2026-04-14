@@ -1,3 +1,33 @@
+CREATE TABLE countries (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    iso_code CHAR(2),              -- e.g., IN, US
+    phone_code VARCHAR(10),        -- e.g., +91
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE states (
+    id BIGSERIAL PRIMARY KEY,
+    country_id INTEGER NOT NULL REFERENCES countries(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    state_code VARCHAR(10),        -- e.g., KA, MH
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE cities (
+    id BIGSERIAL PRIMARY KEY,
+    state_id BIGINT NOT NULL REFERENCES states(id) ON DELETE CASCADE ,
+    name VARCHAR(100) NOT NULL,
+    latitude DECIMAL(10, 8),       -- optional (for maps)
+    longitude DECIMAL(11, 8),      -- optional
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- -- 1. Create ENUM types for status and role fields
 -- CREATE TYPE user_role AS ENUM ('ADMIN', 'DOCTOR', 'PATIENT', 'RECEPTIONIST');
 -- CREATE TYPE appointment_status AS ENUM ('BOOKED', 'CANCELLED', 'COMPLETED');
