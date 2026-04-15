@@ -31,7 +31,7 @@ public class City {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "state_id")
     private State state;
 }

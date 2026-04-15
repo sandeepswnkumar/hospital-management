@@ -8,6 +8,7 @@ import com.hospital.hospital_managment.Auth.model.UserDetails;
 import com.hospital.hospital_managment.Auth.repository.UserRepository;
 import com.hospital.hospital_managment.Auth.service.PasswordService;
 import com.hospital.hospital_managment.Auth.service.UserService;
+import com.hospital.hospital_managment.common.master.Service.LocationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordService passwordService;
     private final UserRepository userRepository;
+    private final LocationService locationService;
 
 
     @Override
@@ -78,9 +80,9 @@ public class UserServiceImpl implements UserService {
         userDetailResponse.setGender(userDetails.getGender());
         userDetailResponse.setAddress1(userDetails.getAddress1());
         userDetailResponse.setAddress2(userDetails.getAddress2());
-        userDetailResponse.setCity(userDetails.getCity());
-        userDetailResponse.setState(userDetails.getState());
-        userDetailResponse.setCountry(userDetails.getCountry());
+    //        userDetailResponse.setCity(locationService.mapToCity(userDetails.getCity()));
+    //        userDetailResponse.setState(locationService.mapToState(userDetails.getState()));
+    //        userDetailResponse.setCountry(locationService.mapToCountry(userDetails.getCountry()));
         return userDetailResponse;
     }
 

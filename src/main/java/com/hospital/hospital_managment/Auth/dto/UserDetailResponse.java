@@ -1,8 +1,8 @@
 package com.hospital.hospital_managment.Auth.dto;
 
-import com.hospital.hospital_managment.common.master.model.City;
-import com.hospital.hospital_managment.common.master.model.Country;
-import com.hospital.hospital_managment.common.master.model.State;
+import com.hospital.hospital_managment.common.master.dto.CityResponse;
+import com.hospital.hospital_managment.common.master.dto.CountryResponse;
+import com.hospital.hospital_managment.common.master.dto.StateResponse;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public class UserDetailResponse {
     private String gender;
     private String address1;
     private String address2;
-    private City city;
-    private State state;
-    private Country country;
+    private CityResponse city;
+    private StateResponse state;
+    private CountryResponse country;
 }

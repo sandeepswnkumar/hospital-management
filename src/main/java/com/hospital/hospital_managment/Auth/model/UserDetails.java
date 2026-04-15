@@ -49,13 +49,16 @@ public class UserDetails {
     @Column(name = "address2")
     private String address2;
 
-    @Column(name = "city_id")
+    @ManyToOne
+    @JoinColumn(name = "city_id")
     private City city;
 
-    @Column(name = "state_id")
+    @ManyToOne
+    @JoinColumn(name = "state_id")
     private State state;
 
-    @Column(name = "country_id")
+    @ManyToOne
+    @JoinColumn(name = "country_id")
     private Country country;
 
     @Column(name = "created_at")

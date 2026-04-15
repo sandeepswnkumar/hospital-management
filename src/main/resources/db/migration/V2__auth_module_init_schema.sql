@@ -33,9 +33,9 @@ CREATE TABLE user_details (
     gender VARCHAR(10) CHECK(gender IN ('male','female','other','prefer_not_say')),
     address1 VARCHAR(150),
     address2 VARCHAR(150),
-    city SMALLINT REFERENCES cities(id),
-    state SMALLINT REFERENCES states(id),
-    country SMALLINT REFERENCES countries(id),
+    city_id SMALLINT REFERENCES cities(id),
+    state_id SMALLINT REFERENCES states(id),
+    country_id SMALLINT REFERENCES countries(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

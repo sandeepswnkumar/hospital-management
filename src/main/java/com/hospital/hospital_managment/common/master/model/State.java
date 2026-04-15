@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,10 +34,10 @@ public class State {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL)
-    private List<City> city;
+    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<City> city = new ArrayList<>();
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
 }
