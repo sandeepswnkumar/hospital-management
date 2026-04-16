@@ -9,13 +9,13 @@ import java.util.List;
 
 public class ResponseUtil {
     public static <T> ResponseEntity<ApiResponse<T>> success(T data, String message){
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.<T>builder()
-                        .success(true)
-                        .message(message)
-                        .data(data)
-                        .timestamp(LocalDateTime.now())
-                        .build()
+                .success(true)
+                .message(message)
+                .data(data)
+                .timestamp(LocalDateTime.now())
+                .build()
         );
     }
 
