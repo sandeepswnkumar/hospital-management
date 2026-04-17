@@ -1,5 +1,6 @@
 package com.hospital.hospital_managment.Auth.service.impl;
 
+import com.hospital.hospital_managment.Auth.config.JwtTokenProvider;
 import com.hospital.hospital_managment.Auth.dto.UserLoginRequest;
 import com.hospital.hospital_managment.Auth.model.User;
 import com.hospital.hospital_managment.Auth.repository.UserRepository;
@@ -15,6 +16,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordService passwordService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String adminLogin(UserLoginRequest userLoginRequest){
@@ -25,6 +27,9 @@ public class AuthServiceImpl implements AuthService {
         if(!passwordService.matchPassword(userLoginRequest.getPassword(), user.getPasswordHash())){
             throw new RuntimeException("Invalid Credentials");
         }
+        String accessToken = jwtTokenProvider.generateAccessToken(user);
+        String refreshToken = jwtTokenProvider.generateRefreshToken();
+
 
 
         return "";

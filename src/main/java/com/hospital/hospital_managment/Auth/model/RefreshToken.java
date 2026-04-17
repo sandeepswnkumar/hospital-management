@@ -1,12 +1,18 @@
 package com.hospital.hospital_managment.Auth.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "refresh_tokens")
+@Getter
+@Setter
+@ToString
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +29,7 @@ public class RefreshToken {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

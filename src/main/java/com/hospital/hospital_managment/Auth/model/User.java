@@ -82,4 +82,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     UserDetails userDetails;
 
+    @OneToMany(mappedBy = "user")
+    private RefreshToken refreshToken;
+
 }
