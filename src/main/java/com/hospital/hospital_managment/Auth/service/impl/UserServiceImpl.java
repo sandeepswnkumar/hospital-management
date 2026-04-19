@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -48,6 +49,13 @@ public class UserServiceImpl implements UserService {
         return users.stream().map(this::mapToUserResponseDto).toList();
     }
 
+
+    @Override
+    public UserResponse getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return mapToUserResponseDto(user);
+    }
+
     private static UserDetails getUserDetails(UserCreateRequest userCreateRequest, User user) {
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(user);
@@ -62,7 +70,9 @@ public class UserServiceImpl implements UserService {
         return userDetails;
     }
 
-    private UserResponse mapToUserResponseDto(User user){
+
+
+    public UserResponse mapToUserResponseDto(User user){
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
         userResponse.setEmail(user.getEmail());
@@ -70,7 +80,7 @@ public class UserServiceImpl implements UserService {
         return userResponse;
     }
 
-    private UserDetailResponse mapToUserDetailsResponse(UserDetails userDetails){
+    public UserDetailResponse mapToUserDetailsResponse(UserDetails userDetails){
         UserDetailResponse userDetailResponse = new UserDetailResponse();
         userDetailResponse.setId(userDetails.getId());
         userDetailResponse.setFirstName(userDetails.getFirstName());
@@ -85,6 +95,8 @@ public class UserServiceImpl implements UserService {
     //        userDetailResponse.setCountry(locationService.mapToCountry(userDetails.getCountry()));
         return userDetailResponse;
     }
+
+
 
 
 }

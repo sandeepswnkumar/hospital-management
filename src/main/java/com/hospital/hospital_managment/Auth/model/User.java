@@ -1,6 +1,7 @@
 package com.hospital.hospital_managment.Auth.model;
 
 import com.hospital.hospital_managment.Auth.Enum.UserStatus;
+import com.hospital.hospital_managment.doctor.model.Doctor;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -82,7 +84,11 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     UserDetails userDetails;
 
-    @OneToMany(mappedBy = "user")
-    private RefreshToken refreshToken;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RefreshToken> refreshToken;
+
+    @OneToOne(mappedBy = "user")
+    private Doctor doctor;
+
 
 }

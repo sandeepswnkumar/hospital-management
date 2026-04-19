@@ -1,6 +1,7 @@
 package com.hospital.hospital_managment.doctor.model;
 
 
+import com.hospital.hospital_managment.Auth.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -20,14 +21,20 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger Id;
 
-    @Column(unique = true, nullable = false)
-    private BigInteger userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String description;
 
     @Column(nullable = false)
     private String specialization;
 
-    private Integer experience_years = 0;
-    private Float consultation_fee = 0f;
+    @Column(name = "experience_years")
+    private Integer experienceYears = 0;
+
+    @Column(name = "consultation_fee")
+    private Float consultationFee = 0f;
 
     @Override
     public final boolean equals(Object o) {

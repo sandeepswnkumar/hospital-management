@@ -8,7 +8,10 @@ import com.hospital.hospital_managment.Auth.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -17,16 +20,17 @@ public class TokenServiceImpl implements TokenService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
-    public RefreshTokenResponse createRefreshToken(RefreshTokenRequest refreshTokenRequest) {
+    public void createRefreshToken(RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(refreshTokenRequest.getToken());
         refreshToken.setUser(refreshTokenRequest.getUser());
-        refreshToken.setExpiryDate(refreshTokenRequest.getExpiryDate());
+        refreshToken.setExpiryDate(Instant.now().plus(7, ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toLocalDateTime());
         refreshToken.setIsRevoked(false);
         refreshToken.setCreatedAt(LocalDateTime.now());
-
-        return null;
+        refreshTokenRepository.save(refreshToken);
     }
+
+
 
 
     public RefreshTokenResponse mapToTokenResponse(RefreshToken refreshToken){

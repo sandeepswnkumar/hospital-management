@@ -15,7 +15,6 @@ public class RefreshTokenRequest {
 //    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     private User user;
     private String token;
-    private LocalDateTime expiryDate;
     private Boolean isRevoked;
 
 

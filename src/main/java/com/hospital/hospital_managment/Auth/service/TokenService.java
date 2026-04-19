@@ -5,6 +5,6 @@ import com.hospital.hospital_managment.Auth.dto.RefreshTokenResponse;
 
 public interface TokenService {
 
-    RefreshTokenResponse createRefreshToken(RefreshTokenRequest refreshTokenRequest);
+    void createRefreshToken(RefreshTokenRequest refreshTokenRequest);
 
 }

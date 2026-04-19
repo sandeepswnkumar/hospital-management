@@ -29,7 +29,7 @@ public class RefreshToken {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 }
