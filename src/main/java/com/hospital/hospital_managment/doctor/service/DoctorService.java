@@ -27,7 +27,7 @@ public class DoctorService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createDoctor(DoctorRequest doctorRequest){
+    public DoctorResponse createDoctor(DoctorRequest doctorRequest){
         UserCreateRequest userCreateRequest = new UserCreateRequest();
         UserDetailRequest userDetailRequest = getUserDetailRequest(doctorRequest);
         userCreateRequest.setEmail(doctorRequest.getEmail());
@@ -41,7 +41,7 @@ public class DoctorService {
         doctor.setSpecialization(doctorRequest.getSpecialization());
         doctor.setConsultationFee(doctorRequest.getConsultationFee());
         doctor.setExperienceYears(doctorRequest.getExperienceYears());
-        doctorRepository.save(doctor);
+        return mapToDoctorResponse(doctorRepository.save(doctor));
 
     }
 
@@ -50,7 +50,7 @@ public class DoctorService {
         userDetailRequest.setFirstName(doctorRequest.getFirstName());
         userDetailRequest.setMiddleName(doctorRequest.getMiddleName());
         userDetailRequest.setLastName(doctorRequest.getLastName());
-        userDetailRequest.setGender(doctorRequest.getGender());
+        userDetailRequest.setGender(doctorRequest.getGender().toLowerCase());
         userDetailRequest.setAddress1(doctorRequest.getAddress1());
         userDetailRequest.setAddress2(doctorRequest.getAddress2());
         userDetailRequest.setCityId(doctorRequest.getCityId());
@@ -63,20 +63,14 @@ public class DoctorService {
     public DoctorResponse mapToDoctorResponse(Doctor doctor){
         DoctorResponse doctorResponse = new DoctorResponse();
         doctorResponse.setId(doctor.getId());
-//        doctorResponse.getUserResponse();
-        doctorResponse.setId(doctor.getId());
-        doctorResponse.setId(doctor.getId());
-        doctorResponse.setId(doctor.getId());
-        doctorResponse.setId(doctor.getId());
-        doctorResponse.setId(doctor.getId());
-
+        doctorResponse.setUserResponse(userService.mapToUserResponseDto(doctor.getUser()));
+        doctorResponse.setSpecialization(doctor.getSpecialization());
+        doctorResponse.setDescription(doctor.getDescription());
+        doctorResponse.setExperienceYears(doctor.getExperienceYears());
+        doctorResponse.setConsultationFee(doctor.getConsultationFee());
+        return doctorResponse;
     }
 
-    public UserCreateRequest mapToUserCreateRequest(DoctorRequest doctorRequest){
-        UserCreateRequest userCreateRequest = new UserCreateRequest();
-        userCreateRequest.setEmail(doctorRequest.getEmail());
-        userCreateRequest.setEmail(doctorRequest.getEmail());
-    }
 
 
 
