@@ -1,5 +1,6 @@
 package com.hospital.hospital_managment.common.utils;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -16,6 +17,21 @@ public class ResponseUtil {
                 .data(data)
                 .timestamp(LocalDateTime.now())
                 .build()
+        );
+    }
+
+    public static <T> ResponseEntity<ApiResponse<List<T>>> successList(Page<T> data, String message){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ApiResponse.<List<T>>builder()
+                        .success(true)
+                        .message(message)
+                        .data(data.getContent())
+                        .page(data.getNumber())
+                        .size(data.getSize())
+                        .totalElements(data.getTotalElements())
+                        .totalPages(data.getTotalPages())
+                        .timestamp(LocalDateTime.now())
+                        .build()
         );
     }
 

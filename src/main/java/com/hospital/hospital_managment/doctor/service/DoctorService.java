@@ -13,9 +13,16 @@ import com.hospital.hospital_managment.doctor.model.Doctor;
 import com.hospital.hospital_managment.doctor.repository.DoctorRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,6 +78,28 @@ public class DoctorService {
         return doctorResponse;
     }
 
+
+    public Page<Doctor> getAllDoctor(
+            int page,
+            int size,
+            String sortBy,
+            String sortDir,
+            String search
+    ){
+        Sort sort = sortDir.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Specification<Doctor> specification = (root, query, cb) -> {
+            if (search == null || search.isEmpty()) {
+                return cb.conjunction();
+            }
+            return cb.or(
+                cb.like(cb.lower(root.get("doctor_name")), "%" + search.toLowerCase() + "%"),
+                cb.like(cb.lower(root.get("specialization")), "%" + search.toLowerCase() + "%")
+            );
+        };
+        return  doctorRepository.findAll(specification, pageable);
+    }
 
 
 
