@@ -4,6 +4,7 @@ import com.hospital.hospital_managment.Auth.dto.UserCreateRequest;
 import com.hospital.hospital_managment.Auth.dto.UserDetailRequest;
 import com.hospital.hospital_managment.Auth.dto.UserResponse;
 import com.hospital.hospital_managment.Auth.model.User;
+import com.hospital.hospital_managment.Auth.model.UserDetails;
 import com.hospital.hospital_managment.Auth.repository.UserRepository;
 import com.hospital.hospital_managment.Auth.service.UserService;
 import com.hospital.hospital_managment.common.utils.Helper;
@@ -11,8 +12,10 @@ import com.hospital.hospital_managment.doctor.dto.DoctorRequest;
 import com.hospital.hospital_managment.doctor.dto.DoctorResponse;
 import com.hospital.hospital_managment.doctor.model.Doctor;
 import com.hospital.hospital_managment.doctor.repository.DoctorRepository;
+import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +23,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.math.BigInteger;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
@@ -49,15 +51,40 @@ public class DoctorService {
         doctor.setConsultationFee(doctorRequest.getConsultationFee());
         doctor.setExperienceYears(doctorRequest.getExperienceYears());
         return mapToDoctorResponse(doctorRepository.save(doctor));
-
     }
+
+    @Transactional
+    public DoctorResponse updateDoctor(BigInteger doctorId, DoctorRequest doctorRequest){
+        Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new RuntimeException("Doctor Not Found"));
+        User user = doctor.getUser();
+        UserDetails userDetails = getUserDetails(doctorRequest, user);
+        user.setUserDetails(userDetails);
+        doctor.setConsultationFee(doctorRequest.getConsultationFee());
+        doctor.setSpecialization(doctorRequest.getSpecialization());
+        doctor.setExperienceYears(doctorRequest.getExperienceYears());
+        doctor.setUser(user);
+        return mapToDoctorResponse(doctorRepository.save(doctor));
+    }
+
+    private static UserDetails getUserDetails(DoctorRequest doctorRequest, User user) {
+        UserDetails userDetails = user.getUserDetails();
+        userDetails.setAddress1(doctorRequest.getAddress1());
+        userDetails.setAddress2(doctorRequest.getAddress2());
+        userDetails.setFirstName(doctorRequest.getFirstName());
+        userDetails.setMiddleName(doctorRequest.getMiddleName());
+        userDetails.setLastName(doctorRequest.getLastName());
+        userDetails.setGender(doctorRequest.getGender());
+        userDetails.setDateOfBirth(doctorRequest.getDateOfBirth());
+        return userDetails;
+    }
+
 
     private static UserDetailRequest getUserDetailRequest(DoctorRequest doctorRequest) {
         UserDetailRequest userDetailRequest = new UserDetailRequest();
         userDetailRequest.setFirstName(doctorRequest.getFirstName());
         userDetailRequest.setMiddleName(doctorRequest.getMiddleName());
         userDetailRequest.setLastName(doctorRequest.getLastName());
-        userDetailRequest.setGender(doctorRequest.getGender().toLowerCase());
+        userDetailRequest.setGender(doctorRequest.getGender());
         userDetailRequest.setAddress1(doctorRequest.getAddress1());
         userDetailRequest.setAddress2(doctorRequest.getAddress2());
         userDetailRequest.setCityId(doctorRequest.getCityId());
@@ -79,28 +106,57 @@ public class DoctorService {
     }
 
 
-    public Page<Doctor> getAllDoctor(
+    public Page<DoctorResponse> getAllDoctor(
             int page,
             int size,
             String sortBy,
             String sortDir,
             String search
     ){
-        Sort sort = sortDir.equalsIgnoreCase("asc") ?
-                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
+        int currentPage = page - 1;
+
+        Sort sort = null;
+        if (sortBy != null && !sortBy.isBlank()) {
+            sort = "asc".equalsIgnoreCase(sortDir)
+                    ? Sort.by(sortBy).ascending()
+                    : Sort.by(sortBy).descending();
+        }
+
+        Pageable pageable = (sort != null)
+                ? PageRequest.of(currentPage, size, sort)
+                : PageRequest.of(currentPage, size);
+
         Specification<Doctor> specification = (root, query, cb) -> {
-            if (search == null || search.isEmpty()) {
+
+            if (search == null || search.trim().isEmpty()) {
                 return cb.conjunction();
             }
+
+            String searchText = "%" + search.trim().toLowerCase() + "%";
+
+            Join<Object, Object> userJoin = root.join("user");
+            Join<Object, Object> detailsJoin = userJoin.join("userDetails");
+
             return cb.or(
-                cb.like(cb.lower(root.get("doctor_name")), "%" + search.toLowerCase() + "%"),
-                cb.like(cb.lower(root.get("specialization")), "%" + search.toLowerCase() + "%")
+                    cb.like(cb.lower(detailsJoin.get("firstName")), searchText),
+                    cb.like(cb.lower(detailsJoin.get("middleName")), searchText),
+                    cb.like(cb.lower(detailsJoin.get("lastName")), searchText)
             );
         };
-        return  doctorRepository.findAll(specification, pageable);
+
+        Page<Doctor> doctors = doctorRepository.findAll(specification, pageable);
+
+        return doctors.map(this::mapToDoctorResponse);
     }
 
+
+    @Transactional
+    public void deleteDoctor(BigInteger doctorId){
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor Not Found"));
+        doctorRepository.delete(doctor);
+
+    }
 
 
 }

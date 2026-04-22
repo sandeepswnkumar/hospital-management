@@ -4,6 +4,7 @@ package com.hospital.hospital_managment.doctor.model;
 import com.hospital.hospital_managment.Auth.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.engine.internal.Cascade;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigInteger;
@@ -21,7 +22,7 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger Id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 

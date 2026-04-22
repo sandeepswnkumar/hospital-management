@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -28,16 +29,27 @@ public class DoctorController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<DoctorResponse>>> getAllDoctor(
-            @RequestParam int page,
-            @RequestParam int size,
-            @RequestParam String sortBy,
-            @RequestParam String sortDir,
-            @RequestParam String search
-
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "") String sortBy,
+            @RequestParam(defaultValue = "") String sortDir,
+            @RequestParam(defaultValue = "") String search
     ){
-        Page<Doctor> doctorResponses = doctorService.getAllDoctor(page, size, sortBy, sortDir, search);
+        Page<DoctorResponse> doctorResponses = doctorService.getAllDoctor(page, size, sortBy, sortDir, search);
         return ResponseUtil.successList(doctorResponses, "Doctors fetched Successfully");
 
     }
+
+    @PutMapping("/{doctorId}")
+    public ResponseEntity<ApiResponse<DoctorResponse>> updateDoctor(@PathVariable BigInteger doctorId,  @RequestBody DoctorRequest doctorRequest){
+        return ResponseUtil.success(doctorService.updateDoctor(doctorId, doctorRequest), "Doctor Updated Successfully");
+    }
+
+    @DeleteMapping("/{doctorId}")
+    public ResponseEntity<ApiResponse<String>> deleteDoctor(@PathVariable BigInteger doctorId){
+        doctorService.deleteDoctor(doctorId);
+        return ResponseUtil.success(null, "Doctor Deleted Successfully");
+    }
+
 
 }

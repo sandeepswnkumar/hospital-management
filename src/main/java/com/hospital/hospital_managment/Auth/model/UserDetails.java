@@ -4,6 +4,7 @@ import com.hospital.hospital_managment.common.master.model.City;
 import com.hospital.hospital_managment.common.master.model.Country;
 import com.hospital.hospital_managment.common.master.model.State;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -41,6 +42,8 @@ public class UserDetails {
     private LocalDate dateOfBirth = null;
 
     @Column(name = "gender")
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private String gender = null;
 
     @Column(name = "address1")
@@ -68,4 +71,16 @@ public class UserDetails {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void setGender(String gender){
+        this.gender = gender.toLowerCase();
+    }
+
+    public String getGender(){
+        if (gender == null || gender.isBlank()) {
+            return gender;
+        }
+        String trimmed = gender.trim().toLowerCase();
+        return trimmed.substring(0,1).toUpperCase() + trimmed.substring(1);
+    }
 }
