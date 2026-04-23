@@ -2,6 +2,7 @@ package com.hospital.hospital_managment.Auth.model;
 
 import com.hospital.hospital_managment.Auth.Enum.UserStatus;
 import com.hospital.hospital_managment.doctor.model.Doctor;
+import com.hospital.hospital_managment.patient.model.Patient;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,6 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString
 public class User {
 
     @Id
@@ -89,6 +89,9 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private Doctor doctor;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Patient> patient;
 
 
 }
