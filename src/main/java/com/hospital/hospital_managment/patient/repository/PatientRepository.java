@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, BigInteger> {
+public interface PatientRepository extends JpaRepository<Patient, Long> {
 }

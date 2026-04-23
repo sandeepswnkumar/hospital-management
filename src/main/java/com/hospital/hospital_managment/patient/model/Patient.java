@@ -16,7 +16,7 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigInteger id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -25,7 +25,7 @@ public class Patient {
     private String middleName;
 
     @Column(name = "last_name")
-    private String lastname;
+    private String lastName;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
