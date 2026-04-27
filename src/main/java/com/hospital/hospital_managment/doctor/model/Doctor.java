@@ -2,19 +2,19 @@ package com.hospital.hospital_managment.doctor.model;
 
 
 import com.hospital.hospital_managment.Auth.model.User;
+import com.hospital.hospital_managment.department.model.Department;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.engine.internal.Cascade;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigInteger;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "doctors")
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 public class Doctor {
 
@@ -36,6 +36,12 @@ public class Doctor {
 
     @Column(name = "consultation_fee")
     private Float consultationFee = 0f;
+
+    @OneToOne(mappedBy = "headDoctor")
+    private Department department;
+
+    @ManyToMany(mappedBy = "doctors")
+    private Set<Department> departments = new HashSet<>();
 
     @Override
     public final boolean equals(Object o) {
